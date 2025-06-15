@@ -13,6 +13,8 @@ Modern ve şık bir Flutter bottom navigation bar widget'ı - **Liquid Glass** e
 
 ## 📸 Ekran Görüntüleri
 
+![Uploading Simulator Screenshot - iPhone 16 Plus - 2025-06-15 at 16.22.18.png…]()
+
 > **Not**: Bu proje liquid glass efekti ile bottom navigation bar widget'ı içerir. Gerçek görünüm için projeyi çalıştırmanız önerilir.
 
 ## 🚀 Kurulum
