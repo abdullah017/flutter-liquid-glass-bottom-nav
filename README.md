@@ -1,4 +1,4 @@
-![simulator_screenshot_5099F478-AE19-4FDD-BDD1-08DEA9AF80E5](https://github.com/user-attachments/assets/c3fd72e3-2d02-4a09-8f2c-094c06352355)# 🌊 Liquid Bottom Navbar
+# 🌊 Liquid Bottom Navbar
 
 Modern ve şık bir Flutter bottom navigation bar widget'ı - **Liquid Glass** efekti ile!
 
