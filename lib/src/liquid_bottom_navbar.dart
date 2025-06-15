@@ -1,5 +1,7 @@
+
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import 'liquid_glass_settings.dart';
 
@@ -28,14 +30,14 @@ class LiquidNavbarItem {
 /// Liquid Glass Bottom Navigation Bar
 class LiquidBottomNavbar extends StatefulWidget {
   const LiquidBottomNavbar({
-    super.key,
+    Key? key,
     required this.items,
     required this.onTap,
     this.currentIndex = 0,
     this.settings = const LiquidGlassSettings(),
     this.height = 70.0,
     this.backgroundColor = Colors.transparent,
-  });
+  }) : super(key: key);
 
   /// Navbar item'ları
   final List<LiquidNavbarItem> items;
@@ -65,24 +67,42 @@ class _LiquidBottomNavbarState extends State<LiquidBottomNavbar>
   Widget build(BuildContext context) {
     return Container(
       height: widget.height,
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: const EdgeInsets.all(20), // Her taraftan 20px boşluk
       child: ClipRRect(
         borderRadius: BorderRadius.circular(25),
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
           child: Container(
             decoration: BoxDecoration(
-              color: widget.settings.glassColor.withValues(alpha: 0.2),
+              color: Colors.white.withOpacity(0.15), // Beyaz transparent
               borderRadius: BorderRadius.circular(25),
               border: Border.all(
-                color: Colors.white.withValues(alpha: 0.2),
-                width: 1,
+                color: Colors.white.withOpacity(
+                  0.3,
+                ), // Daha belirgin beyaz border
+                width: 1.5,
               ),
               boxShadow: [
+                // Üst gölge (elevation efekti)
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
-                  blurRadius: 10,
-                  offset: const Offset(0, 5),
+                  color: Colors.black.withOpacity(0.15),
+                  blurRadius: 20,
+                  offset: const Offset(0, -2),
+                  spreadRadius: 0,
+                ),
+                // Alt gölge (elevation efekti)
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.25),
+                  blurRadius: 25,
+                  offset: const Offset(0, 8),
+                  spreadRadius: 2,
+                ),
+                // İç gölge efekti için ekstra
+                BoxShadow(
+                  color: Colors.white.withOpacity(0.2),
+                  blurRadius: 5,
+                  offset: const Offset(0, 1),
+                  spreadRadius: -1,
                 ),
               ],
             ),
@@ -161,7 +181,7 @@ class _NavbarContentState extends State<_NavbarContent>
               return Expanded(
                 child: GestureDetector(
                   onTap: () => widget.onTap(index),
-                  child: SizedBox(
+                  child: Container(
                     height: 60,
                     child: Stack(
                       alignment: Alignment.center,
@@ -177,11 +197,11 @@ class _NavbarContentState extends State<_NavbarContent>
                                   width: 50,
                                   height: 50,
                                   decoration: BoxDecoration(
-                                    color: Colors.white.withValues(alpha: 0.25),
+                                    color: Colors.white.withOpacity(0.25),
                                     borderRadius: BorderRadius.circular(25),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.white.withValues(alpha: 0.4),
+                                        color: Colors.white.withOpacity(0.4),
                                         blurRadius: 8,
                                         spreadRadius: 1,
                                       ),
