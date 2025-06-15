@@ -22,7 +22,7 @@ class RenderLiquidNavbar extends RenderProxyBox {
 
   final FragmentShader _shader;
   LiquidGlassSettings _settings;
-  final TickerProvider _tickerProvider;
+  TickerProvider _tickerProvider;
   int _currentIndex;
   int _tabCount;
 
@@ -30,6 +30,7 @@ class RenderLiquidNavbar extends RenderProxyBox {
   late AnimationController _animationController;
   late Animation<double> _animation;
   Ticker? _ticker;
+  bool _isAttached = false;
 
   void _initializeAnimation() {
     _animationController = AnimationController(
@@ -93,10 +94,10 @@ class RenderLiquidNavbar extends RenderProxyBox {
       ..setFloat(4, _tabCount.toDouble()) // uTabCount
       ..setFloat(5, now % 100) // uTime (mod 100 to prevent overflow)
       // Glass properties
-      ..setFloat(6, _settings.glassColor.r / 255.0) // uGlassColorR
-      ..setFloat(7, _settings.glassColor.g / 255.0) // uGlassColorG
-      ..setFloat(8, _settings.glassColor.b / 255.0) // uGlassColorB
-      ..setFloat(9, _settings.glassColor.a / 255.0) // uGlassColorA
+      ..setFloat(6, _settings.glassColor.red / 255.0) // uGlassColorR
+      ..setFloat(7, _settings.glassColor.green / 255.0) // uGlassColorG
+      ..setFloat(8, _settings.glassColor.blue / 255.0) // uGlassColorB
+      ..setFloat(9, _settings.glassColor.alpha / 255.0) // uGlassColorA
       ..setFloat(10, _settings.thickness) // uThickness
       ..setFloat(11, _settings.lightIntensity); // uLightIntensity
 
@@ -140,6 +141,7 @@ class RenderLiquidNavbar extends RenderProxyBox {
   @override
   void attach(PipelineOwner owner) {
     super.attach(owner);
+    _isAttached = true;
     // Ticker'ı sadece henüz başlamamışsa başlat
     if (_ticker != null && !_ticker!.isActive) {
       _ticker!.start();
@@ -148,6 +150,7 @@ class RenderLiquidNavbar extends RenderProxyBox {
 
   @override
   void detach() {
+    _isAttached = false;
     _ticker?.stop();
     super.detach();
   }
