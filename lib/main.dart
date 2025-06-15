@@ -25,13 +25,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Liquid Glass Bottom Navbar',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blue,
-          brightness: Brightness.dark,
-        ),
-      ),
+      theme: ThemeData(useMaterial3: true),
       home: const HomePage(),
     );
   }
@@ -88,6 +82,45 @@ class _HomePageState extends State<HomePage> {
     ),
   ];
 
+  // Her sayfa için farklı renk teması
+  List<List<Color>> get _pageGradients => [
+    // Anasayfa - Mavi tonları
+    [
+      const Color(0xFFE3F2FD), // Açık mavi
+      const Color(0xFFBBDEFB), // Orta mavi
+      const Color(0xFF90CAF9), // Koyu mavi
+      const Color(0xFF64B5F6), // En koyu mavi
+    ],
+    // Arama - Yeşil tonları
+    [
+      const Color(0xFFE8F5E8), // Açık yeşil
+      const Color(0xFFC8E6C9), // Orta yeşil
+      const Color(0xFFA5D6A7), // Koyu yeşil
+      const Color(0xFF81C784), // En koyu yeşil
+    ],
+    // Favoriler - Kırmızı/Pembe tonları
+    [
+      const Color(0xFFFCE4EC), // Açık pembe
+      const Color(0xFFF8BBD9), // Orta pembe
+      const Color(0xFFF48FB1), // Koyu pembe
+      const Color(0xFFF06292), // En koyu pembe
+    ],
+    // Profil - Turuncu tonları
+    [
+      const Color(0xFFFFF3E0), // Açık turuncu
+      const Color(0xFFFFE0B2), // Orta turuncu
+      const Color(0xFFFFCC02), // Koyu turuncu
+      const Color(0xFFFFB74D), // En koyu turuncu
+    ],
+    // Ayarlar - Mor tonları
+    [
+      const Color(0xFFF3E5F5), // Açık mor
+      const Color(0xFFE1BEE7), // Orta mor
+      const Color(0xFFCE93D8), // Koyu mor
+      const Color(0xFFBA68C8), // En koyu mor
+    ],
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,17 +128,15 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.transparent, // Arka plan şeffaf
       body: Stack(
         children: [
-          // Background gradient - full screen
-          Container(
-            decoration: const BoxDecoration(
+          // Background gradient - her sayfa için farklı renk
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+            decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [
-                  Color(0xFF1a1a2e),
-                  Color(0xFF16213e),
-                  Color(0xFF0f3460),
-                ],
+                colors: _pageGradients[_currentIndex],
               ),
             ),
           ),
@@ -312,21 +343,79 @@ class SearchTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.search, size: 80, color: Colors.green),
-          SizedBox(height: 16),
-          Text(
-            'Arama',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            // Başlık
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.9),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.green.withOpacity(0.2),
+                    blurRadius: 15,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: const Column(
+                children: [
+                  Icon(Icons.search, size: 60, color: Colors.green),
+                  SizedBox(height: 12),
+                  Text(
+                    'Arama Sayfası',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Yeşil temalı arama sayfası',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.green,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+
+            const SizedBox(height: 30),
+
+            // Arama kutusu
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.8),
+                borderRadius: BorderRadius.circular(25),
+                border: Border.all(color: Colors.green.withOpacity(0.3)),
+              ),
+              child: const Row(
+                children: [
+                  Icon(Icons.search, color: Colors.green),
+                  SizedBox(width: 15),
+                  Expanded(
+                    child: Text(
+                      'Buraya arama yapabilirsiniz...',
+                      style: TextStyle(color: Colors.green, fontSize: 16),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const Spacer(),
+            const SizedBox(height: 130), // Navbar için boşluk
+          ],
+        ),
       ),
     );
   }
@@ -337,21 +426,99 @@ class FavoritesTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.favorite, size: 80, color: Colors.red),
-          SizedBox(height: 16),
-          Text(
-            'Favoriler',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            // Başlık
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.9),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.pink.withOpacity(0.2),
+                    blurRadius: 15,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: const Column(
+                children: [
+                  Icon(Icons.favorite, size: 60, color: Colors.pink),
+                  SizedBox(height: 12),
+                  Text(
+                    'Favoriler',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.pink,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Pembe temalı favoriler sayfası',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.pink,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+
+            const SizedBox(height: 30),
+
+            // Favori öğeler listesi
+            Expanded(
+              child: ListView.builder(
+                itemCount: 5,
+                itemBuilder: (context, index) {
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 15),
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.8),
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(color: Colors.pink.withOpacity(0.3)),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.favorite,
+                          color: Colors.pink,
+                          size: 24,
+                        ),
+                        const SizedBox(width: 15),
+                        Expanded(
+                          child: Text(
+                            'Favori Öğe ${index + 1}',
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.pink,
+                            ),
+                          ),
+                        ),
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          color: Colors.pink.withOpacity(0.7),
+                          size: 16,
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+
+            const SizedBox(height: 130), // Navbar için boşluk
+          ],
+        ),
       ),
     );
   }
@@ -362,19 +529,142 @@ class ProfileTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.person, size: 80, color: Colors.orange),
-          SizedBox(height: 16),
-          Text(
-            'Profil',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            // Profil kartı
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.9),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.orange.withOpacity(0.2),
+                    blurRadius: 15,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  // Profil resmi
+                  Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      color: Colors.orange.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(40),
+                      border: Border.all(color: Colors.orange, width: 3),
+                    ),
+                    child: const Icon(
+                      Icons.person,
+                      size: 40,
+                      color: Colors.orange,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Kullanıcı Adı',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.orange,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Turuncu temalı profil sayfası',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.orange,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
             ),
+
+            const SizedBox(height: 30),
+
+            // Profil menü öğeleri
+            Expanded(
+              child: ListView(
+                children: [
+                  _ProfileMenuItem(
+                    icon: Icons.edit,
+                    title: 'Profili Düzenle',
+                    color: Colors.orange,
+                  ),
+                  _ProfileMenuItem(
+                    icon: Icons.security,
+                    title: 'Güvenlik',
+                    color: Colors.orange,
+                  ),
+                  _ProfileMenuItem(
+                    icon: Icons.notifications,
+                    title: 'Bildirimler',
+                    color: Colors.orange,
+                  ),
+                  _ProfileMenuItem(
+                    icon: Icons.help,
+                    title: 'Yardım',
+                    color: Colors.orange,
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 130), // Navbar için boşluk
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ProfileMenuItem extends StatelessWidget {
+  const _ProfileMenuItem({
+    required this.icon,
+    required this.title,
+    required this.color,
+  });
+
+  final IconData icon;
+  final String title;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 15),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.8),
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: color.withOpacity(0.3)),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, color: color, size: 24),
+          const SizedBox(width: 15),
+          Expanded(
+            child: Text(
+              title,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: color,
+              ),
+            ),
+          ),
+          Icon(
+            Icons.arrow_forward_ios,
+            color: color.withOpacity(0.7),
+            size: 16,
           ),
         ],
       ),
@@ -387,19 +677,177 @@ class SettingsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.settings, size: 80, color: Colors.purple),
-          SizedBox(height: 16),
-          Text(
-            'Ayarlar',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            // Başlık
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.9),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.purple.withOpacity(0.2),
+                    blurRadius: 15,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: const Column(
+                children: [
+                  Icon(Icons.settings, size: 60, color: Colors.purple),
+                  SizedBox(height: 12),
+                  Text(
+                    'Ayarlar',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.purple,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Mor temalı ayarlar sayfası',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.purple,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
             ),
+
+            const SizedBox(height: 30),
+
+            // Ayar kategorileri
+            Expanded(
+              child: ListView(
+                children: [
+                  _SettingsCategory(
+                    title: 'Genel Ayarlar',
+                    items: [
+                      _SettingsItem(
+                        icon: Icons.language,
+                        title: 'Dil',
+                        color: Colors.purple,
+                      ),
+                      _SettingsItem(
+                        icon: Icons.dark_mode,
+                        title: 'Tema',
+                        color: Colors.purple,
+                      ),
+                      _SettingsItem(
+                        icon: Icons.notifications,
+                        title: 'Bildirimler',
+                        color: Colors.purple,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  _SettingsCategory(
+                    title: 'Hesap Ayarları',
+                    items: [
+                      _SettingsItem(
+                        icon: Icons.privacy_tip,
+                        title: 'Gizlilik',
+                        color: Colors.purple,
+                      ),
+                      _SettingsItem(
+                        icon: Icons.security,
+                        title: 'Güvenlik',
+                        color: Colors.purple,
+                      ),
+                      _SettingsItem(
+                        icon: Icons.backup,
+                        title: 'Yedekleme',
+                        color: Colors.purple,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 130), // Navbar için boşluk
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SettingsCategory extends StatelessWidget {
+  const _SettingsCategory({required this.title, required this.items});
+
+  final String title;
+  final List<_SettingsItem> items;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 5, bottom: 10),
+          child: Text(
+            title,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.purple,
+            ),
+          ),
+        ),
+        ...items,
+      ],
+    );
+  }
+}
+
+class _SettingsItem extends StatelessWidget {
+  const _SettingsItem({
+    required this.icon,
+    required this.title,
+    required this.color,
+  });
+
+  final IconData icon;
+  final String title;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.8),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withOpacity(0.3)),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, color: color, size: 22),
+          const SizedBox(width: 15),
+          Expanded(
+            child: Text(
+              title,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: color,
+              ),
+            ),
+          ),
+          Icon(
+            Icons.arrow_forward_ios,
+            color: color.withOpacity(0.7),
+            size: 14,
           ),
         ],
       ),
